@@ -1,6 +1,6 @@
 import cv2
 
-cap = cv2.VideoCapture('http://192.168.1.51:4747/video')
+cap = cv2.VideoCapture('http://192.168.1.8:81/stream')
 
 cv2.namedWindow('live cam', cv2.WINDOW_NORMAL)
 
