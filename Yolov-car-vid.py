@@ -1,6 +1,23 @@
 import cv2
 import numpy as np
 
+# # Yolo v3-tiny
+# yolo_weights = "yolov3-tiny.weights"
+# yolo_cfg = "yolov3-tiny.cfg"
+
+# # Yolo v2-tiny
+# yolo_weights = "yolov2-tiny.weights"
+# yolo_cfg = "yolov2-tiny.cfg"
+
+# # Yolo v3
+# yolo_weights = "yolov3.weights"
+# yolo_cfg = "yolov3.cfg"
+
+# Yolo v7-tiny
+yolo_weights = "yolov7-tiny.weights"
+yolo_cfg = "yolov7-tiny.cfg"
+
+
 def get_output_layers(net):
     layer_names = net.getLayerNames()
     try:
@@ -9,9 +26,9 @@ def get_output_layers(net):
         output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
     return output_layers
 
-def yolov3car(gambar):
+def yolov3car(gambar, conf=0.5):
 	# Load Yolo
-	net = cv2.dnn.readNet("yolov3-tiny.weights", "yolov3-tiny.cfg") # get from https://pjreddie.com/darknet/yolo/
+	net = cv2.dnn.readNet(yolo_weights, yolo_cfg) # get from https://pjreddie.com/darknet/yolo/
 	# Name custom object
 	classes = ["car"]
 	# Create blob
@@ -32,7 +49,7 @@ def yolov3car(gambar):
 			class_id = np.argmax(scores)
 			confidence = scores[class_id]
 			# Get the bounding box
-			if confidence > 0.7:
+			if confidence > conf:
 				# Rescale the bounding box
 				center_x = int(detection[0] * Width)
 				center_y = int(detection[1] * Height)
