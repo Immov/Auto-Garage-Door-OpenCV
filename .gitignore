@@ -4,3 +4,4 @@ yolov3-tiny.*
 yolov2-tiny.*
 yolov7-tiny.*
 yolov3.*
+.env
