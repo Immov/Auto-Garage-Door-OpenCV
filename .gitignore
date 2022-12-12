@@ -1,5 +1,6 @@
 /Images
 /Videos
+/_pycache_
 yolov3-tiny.*
 yolov2-tiny.*
 yolov7-tiny.*
