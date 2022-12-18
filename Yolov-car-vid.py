@@ -20,11 +20,13 @@ while True:
 	frame = rescaleFrame(frame, .5)
 	if(framecount%(fps/1)==0): #Detecting every 1 second
 		print("Detecting...")
-		yolo.detect_cars(frame)
+		yolo.detect_cars(frame, framecount)
+		cv2.imwrite("Original.jpg", frame)
 	cv2.imshow('Video',frame)
 	if cv2.waitKey(20) & 0xFF==ord('d'): # if d is pressed, then break
 		break
 	framecount+=1
+	break
 
 cap.release()
 cv2.destroyAllWindows()
