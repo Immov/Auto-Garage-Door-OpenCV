@@ -1,6 +1,6 @@
 /Images
 /Videos
-# /__pycache__
+/__pycache__
 yolov3-tiny.*
 yolov2-tiny.*
 yolov7-tiny.*
