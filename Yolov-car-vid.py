@@ -17,7 +17,7 @@ fps = 30
 framecount = 0
 while True:
 	success, frame = cap.read()
-	frame = rescaleFrame(frame, .5)
+	# frame = rescaleFrame(frame, .5)
 	if(framecount%(fps/1)==0): #Detecting every 1 second
 		detect = yolo.detect_cars(frame, framecount)
 		cv2.imshow('Detect', detect)

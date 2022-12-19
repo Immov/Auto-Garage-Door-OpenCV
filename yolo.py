@@ -83,7 +83,7 @@ def detect_cars(img, frame_num):
 	end_time = time.time()
 
 	elapsed_time = end_time - start_time
-	print(f'Yolo detecting for {elapsed_time:.6f} seconds')
+	# print(f'Yolo detecting for {elapsed_time:.6f} seconds')
 	detected_cars = merge_boxes(detected_cars, 10)
 
 	# Every 5 seconds
@@ -96,14 +96,15 @@ def detect_cars(img, frame_num):
 				x=0
 			if(y<0):
 				y=0
-			# cv2.imwrite(f'Images/Result/FRAME{frame_num}-CAR{i}.jpg', image[y:y+h, x:x+w])
+			cv2.imwrite(f'Images/Result/FRAME{frame_num}-CAR{i}.jpg', image[y:y+h, x:x+w])
 			i+=1
+		print(f'{i} IMAGES at FRAME {frame_num} EXPORTED...')
 
 	# draw the bounding boxes on the image
 	i = 0
 	for car in detected_cars:
 		x, y, w, h = car
-		cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 1)
+		cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
 		i+=1
 	if(i!=0):
 		print(f"{i} Car feature is detected!")
