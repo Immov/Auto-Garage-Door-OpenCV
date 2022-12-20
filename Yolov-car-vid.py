@@ -9,15 +9,15 @@ def rescaleFrame(frame, scale=0.75):
 	return cv2.resize(frame, dimensions, interpolation=cv2.INTER_AREA)
 
 # cap = cv2.VideoCapture(0) # Webcam
-# cap = cv2.VideoCapture('Videos/Record/lands1.mp4') # File
+cap = cv2.VideoCapture('Videos/Record/lands1.mp4') # File
 # cap = cv2.VideoCapture('Videos/car.mp4') # File
-cap = cv2.VideoCapture('http://192.168.1.51:4747/video') # Network
+# cap = cv2.VideoCapture('http://192.168.1.51:4747/video') # Network
 
 fps = 30
 framecount = 0
 while True:
 	success, frame = cap.read()
-	# frame = rescaleFrame(frame, .5)
+	frame = rescaleFrame(frame, .5)
 	if(framecount%(fps/1)==0): #Detecting every 1 second
 		detect = yolo.detect_cars(frame, framecount)
 		cv2.imshow('Detect', detect)
