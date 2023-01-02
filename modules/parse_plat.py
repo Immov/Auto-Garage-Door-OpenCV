@@ -1,3 +1,5 @@
+# https://unydevelopernetwork.com/index.php/2021/05/03/membuat-deteksi-plat-nomer-kendaraan-sederhana-dengan-opencv-python/
+
 import cv2 as cv
 import imutils as im
 
