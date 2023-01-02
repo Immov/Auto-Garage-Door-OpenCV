@@ -1,18 +1,16 @@
 import cv2 as cv
 import imutils as im
 
-image = cv.imread('Videos/Capture/plat2.jpg')
+path = 'resource/images/1.jpg' # too large
+path = 'resource/images/Plate/plat2.jpg' #working
+image = cv.imread(path)
 image = im.resize(image, width=500)
 
 gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-
 blur = cv.bilateralFilter(gray, 11, 17, 17)
-
 edgeDet = cv.Canny(blur, 170, 200)
-
 (cnts, _) = cv.findContours(edgeDet.copy(), cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE)
 cnts = sorted(cnts, key = cv.contourArea, reverse = True)[:30]
-
 NumberPlateCnt = None
 
 count = 0

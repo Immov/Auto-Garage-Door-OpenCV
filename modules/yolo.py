@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
 import time
-import tess_ocr
+from modules import tesseract_ocr as ocr
+from modules import boxes
 
 # # Yolo v3-tiny
 # yolo_weights = "yolov3-tiny.weights"
@@ -16,40 +17,8 @@ import tess_ocr
 # yolo_cfg = "yolov3.cfg"
 
 # Yolo v7-tiny
-yolo_weights = "yolov7-tiny.weights"
-yolo_cfg = "yolov7-tiny.cfg"
-
-# FInd largest box
-def find_largest_box(boxes):
-  largest_box = None
-  largest_area = 0
-  for box in boxes:
-    x, y, w, h = box
-    area = w * h
-    if area > largest_area:
-      largest_area = area
-      largest_box = box
-  return largest_box
-
-# Removes duplicated boxes
-def merge_boxes(boxes, treshold):
-    # Initialize empty list for merged boxes
-    merged_boxes = []
-    # Sort boxes by x-coordinate
-    boxes.sort(key=lambda x: x[0])
-    # Iterate over boxes and try to merge them
-    while len(boxes) > 0:
-        box = boxes.pop(0)
-        merged = False
-        for i, mbox in enumerate(merged_boxes):
-            if abs(box[0] - mbox[0]) < treshold and abs(box[1] - mbox[1]) < treshold:
-                # Merge boxes
-                merged_boxes[i] = (min(box[0], mbox[0]), min(box[1], mbox[1]), max(box[2], mbox[2]), max(box[3], mbox[3]))
-                merged = True
-                break
-        if not merged:
-            merged_boxes.append(box)
-    return merged_boxes
+yolo_weights = "YOLO\yolov7-tiny.weights"
+yolo_cfg = "YOLO\yolov7-tiny.cfg"
 
 
 def get_output_layers(net):
@@ -60,9 +29,9 @@ def get_output_layers(net):
 		output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 	return output_layers
 
-def detect_cars(img, frame_num):
+def detect_cars(img, frame_num, path):
 	image = img.copy()
-	net = cv2.dnn.readNet("yolov7-tiny.weights", "yolov7-tiny.cfg")
+	net = cv2.dnn.readNet(yolo_weights, yolo_cfg)
 	height, width, channels = image.shape
 	blob = cv2.dnn.blobFromImage(image, 0.00392, (416, 416), (0, 0, 0), True, crop=False)
 	net.setInput(blob)
@@ -97,7 +66,7 @@ def detect_cars(img, frame_num):
 
 	elapsed_time = end_time - start_time
 	# print(f'Yolo detecting for {elapsed_time:.6f} seconds')
-	detected_cars = merge_boxes(detected_cars, 10)
+	detected_cars = boxes.merge_boxes(detected_cars, 10)
 
 	''' Every 5 seconds
 	i=0
@@ -115,7 +84,7 @@ def detect_cars(img, frame_num):
 	'''
 
 	if len(detected_cars)>0:
-		largest = find_largest_box(detected_cars)
+		largest = boxes.find_largest_box(detected_cars)
 		if(frame_num%90==0): # every 3 seconds
 			x, y, w, h = largest
 			if(x<0):
@@ -123,13 +92,12 @@ def detect_cars(img, frame_num):
 			if(y<0):
 				y=0
 			cropped = image[y:y+h, x:x+w]
-			cv2.imwrite(f'Images/Result/FRAME{frame_num}-LARGEST.jpg', cropped)
+			cv2.imwrite(f'{path}/FRAME{frame_num}-LARGEST.jpg', cropped)
 			print(f'LARGEST CAR AT FRAME {frame_num} EXPORTED...')
-			number = tess_ocr.OCR(cropped)
+			number = ocr.OCR(cropped)
 			print(f'Detected Text: {number}')
 	else:
 		print("No detected")
-
 
 	# draw the bounding boxes on the image
 	i = 0
@@ -141,8 +109,5 @@ def detect_cars(img, frame_num):
 		print(f"{i} Car feature is detected!")
 	else:
 		print("No car is detected")
-
-
-	
 
 	return image
