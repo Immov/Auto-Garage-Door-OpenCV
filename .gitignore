@@ -3,5 +3,5 @@ __pycache__
 /resource/images
 /resource/results/*
 /resource/videos/*
-/embedded/*
+/embedded/*/
 .env
