@@ -1,4 +1,7 @@
 __pycache__
-/YOLO
-/resource
+/YOLO/*
+/resource/images
+/resource/results/*
+/resource/videos/*
+/embedded/*
 .env
